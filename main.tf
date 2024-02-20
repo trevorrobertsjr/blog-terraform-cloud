@@ -13,7 +13,7 @@ resource "aws_lambda_function" "example_lambda" {
   # Optionally, specify the S3 object version if you want to use a specific version of the ZIP file
   # s3_object_version = "your-object-version"
 
-  source_code_hash = filebase64sha256(goInvalidateCacheNoRPC.zip")  # For local ZIP file checksum. Update the path as necessary.
+  source_code_hash = filebase64sha256("goInvalidateCacheNoRPC.zip")  # For local ZIP file checksum. Update the path as necessary.
 }
 
 resource "aws_iam_role" "example_lambda_role" {
