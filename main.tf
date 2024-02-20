@@ -6,7 +6,7 @@ resource "aws_lambda_function" "example_lambda" {
   function_name = "go_CloudFront_invalidate"
   handler       = "bootstrap"  # Update this based on your runtime and entry point.
   role          = aws_iam_role.example_lambda_role.arn  # Ensure you have a role with appropriate permissions.
-  runtime       = "provided.al2023"  # Replace with the correct runtime identifier.
+  runtime       = "provided.al2"  # Replace with the correct runtime identifier.
   s3_bucket     = "blog-terraform-input-artifacts"
   s3_key        = "goInvalidateCacheNoRPC.zip"
 }
