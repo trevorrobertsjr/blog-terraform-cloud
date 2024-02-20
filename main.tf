@@ -9,11 +9,6 @@ resource "aws_lambda_function" "example_lambda" {
   runtime       = "provided.al2023"  # Replace with the correct runtime identifier.
   s3_bucket     = "blog-terraform-input-artifacts"
   s3_key        = "goInvalidateCacheNoRPC.zip"
-
-  # Optionally, specify the S3 object version if you want to use a specific version of the ZIP file
-  # s3_object_version = "your-object-version"
-
-  source_code_hash = filebase64sha256("goInvalidateCacheNoRPC.zip")  # For local ZIP file checksum. Update the path as necessary.
 }
 
 resource "aws_iam_role" "example_lambda_role" {
@@ -41,6 +36,7 @@ resource "aws_iam_policy_attachment" "lambda_basic_execution_cloudfront_codepipe
     "arn:aws:iam::aws:policy/CloudFrontFullAccess",
     "arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess"
   ])
+  name = "lambda_basic_execution_cloudfront_codepipeline"
   roles      = [aws_iam_role.example_lambda_role.name]
   policy_arn = each.value
 }
