@@ -7,6 +7,7 @@ resource "aws_lambda_function" "go_lambda" {
   function_name = "go_CloudFront_invalidate"
   handler       = "bootstrap"
   role          = aws_iam_role.go_lambda_role.arn
+  architectures = ["arm64"]
   runtime       = "provided.al2023"
   s3_bucket     = "blog-terraform-input-artifacts"
   s3_key        = "goInvalidateCacheNoRPC.zip"
