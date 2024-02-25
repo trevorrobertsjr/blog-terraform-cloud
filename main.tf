@@ -1,19 +1,20 @@
 provider "aws" {
   region = var.region
-  # shared_config_files = [var.tfc_aws_dynamic_credentials.default.shared_config_file]
 }
 
-resource "aws_lambda_function" "example_lambda" {
+# Create a Lambda function using the OS-only runtime and my compiled source.
+resource "aws_lambda_function" "go_lambda" {
   function_name = "go_CloudFront_invalidate"
-  handler       = "bootstrap"  # Update this based on your runtime and entry point.
-  role          = aws_iam_role.example_lambda_role.arn  # Ensure you have a role with appropriate permissions.
-  runtime       = "provided.al2"  # Replace with the correct runtime identifier.
+  handler       = "bootstrap"
+  role          = aws_iam_role.go_lambda_role.arn
+  runtime       = "provided.al2"
   s3_bucket     = "blog-terraform-input-artifacts"
   s3_key        = "goInvalidateCacheNoRPC.zip"
 }
 
-resource "aws_iam_role" "example_lambda_role" {
-  name = "example_lambda_role"
+# Create an IAM role for the Lambda function to use.
+resource "aws_iam_role" "go_lambda_role" {
+  name = "go_lambda_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -30,7 +31,7 @@ resource "aws_iam_role" "example_lambda_role" {
   })
 }
 
-# Attach a policy to the IAM role to grant necessary permissions for Lambda
+# Attach a policy to the IAM role to grant necessary permissions for Lambda.
 resource "aws_iam_policy_attachment" "lambda_basic_execution_cloudfront_codepipeline" {
   for_each = toset([
     "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", 
@@ -38,7 +39,7 @@ resource "aws_iam_policy_attachment" "lambda_basic_execution_cloudfront_codepipe
     "arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess"
   ])
   name = "lambda_basic_execution_cloudfront_codepipeline"
-  roles      = [aws_iam_role.example_lambda_role.name]
+  roles      = [aws_iam_role.go_lambda_role.name]
   policy_arn = each.value
 }
 
