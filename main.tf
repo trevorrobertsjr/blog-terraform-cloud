@@ -31,7 +31,7 @@ resource "aws_iam_role" "go_lambda_role" {
   })
 }
 
-# Attach a policy to the IAM role to grant necessary permissions for Lambda.
+# Attach policies to the IAM role to grant necessary permissions for the Lambda function.
 resource "aws_iam_policy_attachment" "lambda_basic_execution_cloudfront_codepipeline" {
   for_each = toset([
     "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", 
